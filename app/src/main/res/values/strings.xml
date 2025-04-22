@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AddSEO</string>
+    <string name="logo_de_addseo">Logo de addSEO</string>
+    <string name="desliza_opciones">¡Desliza para ver más opciones!</string>
 </resources>

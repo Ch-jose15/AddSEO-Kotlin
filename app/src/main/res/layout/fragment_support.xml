@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/supportText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Podemos ayudarte?\n¡Tu soporte, al alcance de un clic!"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/supportDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Olvídate de las esperas y resuelve tus dudas al instante desde un solo sitio."
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_bg"
+            android:text="📞"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"/>
+
+        <Button
+            android:id="@+id/btnMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_bg"
+            android:text="💬"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"/>
+
+        <Button
+            android:id="@+id/btnAgenda"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_bg"
+            android:text="📅"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+</LinearLayout>
