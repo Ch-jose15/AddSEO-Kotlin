@@ -1,123 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/gray_50"
     tools:context=".SupportTicketActivity">
 
-    <!-- Botón de Regresar -->
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Regresar"
-        android:src="@drawable/ic_arrow_back"
-        android:tint="@color/gray_700"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Isla para el contenido -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
+    <!-- AppBar fija con CollapsingToolbarLayout -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:cardBackgroundColor="@color/gray_100"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBack">
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        app:elevation="4dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingBottom="16dp"
+            app:layout_scrollFlags="noScroll">
 
-            <!-- Título -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tickets de Soporte"
-                android:textAlignment="center"
-                android:textColor="@color/gray_900"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <!-- Descripción -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <!-- Botón de Regresar -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardBackButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Los tickets de soporte te permiten comunicar problemas técnicos o consultas específicas a nuestro equipo. Un especialista responderá a tu solicitud en un plazo de 24 horas."
-                android:textColor="@color/gray_700"
-                android:textSize="16sp" />
+                app:cardBackgroundColor="@color/yellow_primary"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Separador -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@color/gray_300" />
-
-            <!-- Campo de Nombre -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nameInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre"
-                app:boxBackgroundColor="@color/white">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etName"
+                <ImageButton
+                    android:id="@+id/btnBack"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Regresar"
+                    android:src="@drawable/ic_arrow_back_custom" />
+            </androidx.cardview.widget.CardView>
 
-            <!-- Campo de Consulta -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/contentInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+            <!-- Número de ticket (elemento útil) -->
+            <TextView
+                android:id="@+id/tvTicketNumber"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Detalle de tu consulta"
-                app:boxBackgroundColor="@color/white">
+                android:layout_marginEnd="16dp"
+                android:background="@color/yellow_light"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="ID de ticket: TK-2304221-1234"
+                android:textColor="@color/gray_800"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:lines="5" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Botón de Enviar -->
-            <Button
-                android:id="@+id/btnSubmit"
-                android:layout_width="match_parent"
+            <!-- Pregunta principal en diagonal -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardQuestion"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="@color/gray_800"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:text="Enviar Ticket"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardBackButton">
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tvQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/yellow_primary"
+                    android:paddingStart="32dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
+                    android:rotation="-2"
+                    android:text="¿Qué necesitas hoy?"
+                    android:textColor="@color/gray_900"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenido principal con scroll -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="32dp">
+
+            <!-- Tarjeta principal inclinada en dirección opuesta -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardMain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:rotation="1"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <!-- Título -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tickets de Soporte"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray_900"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <!-- Descripción -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:justificationMode="inter_word"
+                        android:text="Los tickets de soporte son tu línea directa con nuestros expertos técnicos. Cada ticket es tratado con la máxima prioridad, asegurando que tus problemas sean resueltos de manera rápida y eficiente. Nuestro sistema de tracking te permitirá seguir el estado de tu consulta en tiempo real."
+                        android:textAlignment="textStart"
+                        android:textColor="@color/gray_700"
+                        android:textSize="15sp" />
+
+                    <!-- Información de prioridad (elemento útil) -->
+                    <TextView
+                        android:id="@+id/tvPriorityInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/gray_100"
+                        android:drawableEnd="@drawable/ic_info"
+                        android:padding="8dp"
+                        android:text="Información de prioridad (toca para más detalles)"
+                        android:textColor="@color/gray_800"
+                        android:textSize="14sp"
+                        android:textStyle="italic" />
+
+                    <!-- Información de tiempo estimado (inicialmente oculto) -->
+                    <TextView
+                        android:id="@+id/tvEstimatedTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/yellow_light"
+                        android:padding="12dp"
+                        android:text="Tiempo estimado de respuesta:\n• Prioridad Alta: 2-4 horas\n• Prioridad Media: 24 horas\n• Prioridad Baja: 48 horas"
+                        android:textColor="@color/gray_800"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <!-- Separador creativo -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="3dp"
+                            android:layout_weight="1"
+                            android:background="@color/yellow_primary" />
+
+                        <View
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:background="@drawable/circle_yellow" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="3dp"
+                            android:layout_weight="1"
+                            android:background="@color/yellow_primary" />
+                    </LinearLayout>
+
+                    <!-- Campo de Nombre -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/nameInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tu nombre"
+                        app:boxStrokeColor="@color/yellow_primary"
+                        app:hintTextColor="@color/gray_600"
+                        app:startIconDrawable="@drawable/ic_person"
+                        app:startIconTint="@color/yellow_primary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:inputType="textPersonName" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Campo de Consulta -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/contentInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="¿En qué podemos ayudarte?"
+                        app:boxStrokeColor="@color/yellow_primary"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="500"
+                        app:hintTextColor="@color/gray_600"
+                        app:startIconDrawable="@drawable/ic_message"
+                        app:startIconTint="@color/yellow_primary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:gravity="top"
+                            android:inputType="textMultiLine"
+                            android:lines="6" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Botón de Enviar -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:backgroundTint="@color/yellow_primary"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:text="ENVIAR TICKET"
+                        android:textColor="@color/gray_900"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp"
+                        app:elevation="4dp"
+                        app:icon="@drawable/ic_send"
+                        app:iconGravity="textEnd"
+                        app:iconTint="@color/gray_900" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

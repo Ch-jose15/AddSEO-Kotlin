@@ -1,0 +1,17 @@
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Color primario para diversos elementos UI -->
+        <item name="colorPrimary">@color/yellow_primary</item>
+        <item name="colorPrimaryDark">@color/yellow_dark</item>
+        <item name="colorAccent">@color/yellow_primary</item>
+
+        <!-- Para TextInputLayout -->
+        <item name="colorControlActivated">@color/yellow_primary</item>
+        <item name="colorControlHighlight">@color/yellow_light</item>
+
+        <!-- Eliminar barra de estado del sistema -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/gray_100</item>
+    </style>
+</resources>

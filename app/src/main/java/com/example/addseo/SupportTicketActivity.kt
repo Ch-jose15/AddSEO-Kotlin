@@ -1,53 +1,108 @@
 package com.example.addseo
 
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.addseo.tickets_soporte
+import androidx.cardview.widget.CardView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class tickets_soporte {
+class SupportTicketActivity : AppCompatActivity() {
 
-    private lateinit var binding: tickets_soporte
+    // Declaración de vistas
+    private lateinit var btnBack: ImageButton
+    private lateinit var cardBackButton: CardView
+    private lateinit var tvQuestion: TextView
+    private lateinit var tvTicketNumber: TextView
+    private lateinit var nameInputLayout: TextInputLayout
+    private lateinit var contentInputLayout: TextInputLayout
+    private lateinit var etName: EditText
+    private lateinit var etContent: EditText
+    private lateinit var btnSubmit: MaterialButton
+    private lateinit var tvPriorityInfo: TextView
+    private lateinit var tvEstimatedTime: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySupportTicketBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_support_ticket)
 
+        // Inicializar vistas
+        initViews()
         setupListeners()
+        generateTicketNumber()
+    }
+
+    private fun initViews() {
+        btnBack = findViewById(R.id.btnBack)
+        cardBackButton = findViewById(R.id.cardBackButton)
+        tvQuestion = findViewById(R.id.tvQuestion)
+        tvTicketNumber = findViewById(R.id.tvTicketNumber)
+        nameInputLayout = findViewById(R.id.nameInputLayout)
+        contentInputLayout = findViewById(R.id.contentInputLayout)
+        etName = findViewById(R.id.etName)
+        etContent = findViewById(R.id.etContent)
+        btnSubmit = findViewById(R.id.btnSubmit)
+        tvPriorityInfo = findViewById(R.id.tvPriorityInfo)
+        tvEstimatedTime = findViewById(R.id.tvEstimatedTime)
     }
 
     private fun setupListeners() {
         // Configurar el botón de regresar
-        binding.btnBack.setOnClickListener {
+        btnBack.setOnClickListener {
             finish() // Cierra esta actividad y regresa a la anterior
         }
 
         // Configurar el botón de enviar
-        binding.btnSubmit.setOnClickListener {
+        btnSubmit.setOnClickListener {
             if (validateForm()) {
                 sendTicket()
             }
         }
+
+        // Mostrar/ocultar información de prioridad al hacer clic
+        tvPriorityInfo.setOnClickListener {
+            tvEstimatedTime.visibility = if (tvEstimatedTime.visibility == View.VISIBLE) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+        }
+    }
+
+    private fun generateTicketNumber() {
+        // Generar un número de ticket basado en la fecha actual
+        val dateFormat = SimpleDateFormat("yyMMddHHmm", Locale.getDefault())
+        val ticketId = "TK-" + dateFormat.format(Date()) + "-" + (1000..9999).random()
+        tvTicketNumber.text = "ID de ticket: $ticketId"
     }
 
     private fun validateForm(): Boolean {
         var isValid = true
 
         // Validar el nombre
-        if (binding.etName.text.toString().trim().isEmpty()) {
-            binding.nameInputLayout.error = "Por favor, ingresa tu nombre"
+        if (etName.text.toString().trim().isEmpty()) {
+            nameInputLayout.error = "Por favor, ingresa tu nombre"
             isValid = false
         } else {
-            binding.nameInputLayout.error = null
+            nameInputLayout.error = null
         }
 
         // Validar el contenido de la consulta
-        if (binding.etContent.text.toString().trim().isEmpty()) {
-            binding.contentInputLayout.error = "Por favor, detalla tu consulta"
+        if (etContent.text.toString().trim().isEmpty()) {
+            contentInputLayout.error = "Por favor, detalla tu consulta"
+            isValid = false
+        } else if (etContent.text.toString().trim().length < 20) {
+            contentInputLayout.error = "Tu descripción es demasiado corta. Por favor, sé más específico"
             isValid = false
         } else {
-            binding.contentInputLayout.error = null
+            contentInputLayout.error = null
         }
 
         return isValid
@@ -55,24 +110,23 @@ class tickets_soporte {
 
     private fun sendTicket() {
         // Obtener los datos del formulario
-        val name = binding.etName.text.toString().trim()
-        val content = binding.etContent.text.toString().trim()
+        val name = etName.text.toString().trim()
+        val content = etContent.text.toString().trim()
 
-        // Aquí implementarías la lógica para enviar el ticket a tu sistema
-        // Por ejemplo, una llamada a una API o guardar en una base de datos local
+        // Aquí implementar la lógica para enviar el ticket a tu sistema
 
         // Ejemplo de simulación de envío exitoso
         Toast.makeText(
             this,
-            "Ticket enviado correctamente. Gracias, $name!",
+            "¡Ticket enviado con éxito! Te responderemos pronto, $name.",
             Toast.LENGTH_LONG
         ).show()
 
         // Limpiar el formulario después del envío exitoso
-        binding.etName.text?.clear()
-        binding.etContent.text?.clear()
+        etName.setText("")
+        etContent.setText("")
 
-        // Opcional: regresar a la pantalla anterior después de un envío exitoso
-        // finish()
+        // Generar un nuevo número de ticket
+        generateTicketNumber()
     }
 }
