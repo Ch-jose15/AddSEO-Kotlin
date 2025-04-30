@@ -24,4 +24,12 @@
     <color name="yellow_primary">#FFFFC107</color>
     <color name="yellow_dark">#FFFFA000</color>
     <color name="yellow_light">#FFFFECB3</color>
+
+    <!-- Tonos de azul -->
+    <color name="blue_primary">#1E88E5</color>
+    <color name="blue_dark">#1565C0</color>
+    <color name="blue_light">#64B5F6</color>
+    <color name="blue_accent">#82B1FF</color>
+
+
 </resources>

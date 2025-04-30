@@ -2,131 +2,206 @@ package com.example.addseo
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
+import javax.mail.*
+import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeMessage
 
 class SupportTicketActivity : AppCompatActivity() {
 
-    // Declaración de vistas
+    private lateinit var etName: TextInputEditText
+    private lateinit var etContent: TextInputEditText
+    private lateinit var spinnerPriority: AutoCompleteTextView
+    private lateinit var spinnerContactMethod: AutoCompleteTextView
+    private lateinit var spinnerContactTime: AutoCompleteTextView
+    private lateinit var btnSubmit: Button
     private lateinit var btnBack: ImageButton
-    private lateinit var cardBackButton: CardView
-    private lateinit var tvQuestion: TextView
-    private lateinit var tvTicketNumber: TextView
-    private lateinit var nameInputLayout: TextInputLayout
-    private lateinit var contentInputLayout: TextInputLayout
-    private lateinit var etName: EditText
-    private lateinit var etContent: EditText
-    private lateinit var btnSubmit: MaterialButton
-    private lateinit var tvPriorityInfo: TextView
-    private lateinit var tvEstimatedTime: TextView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_support_ticket)
 
         // Inicializar vistas
-        initViews()
-        setupListeners()
-        generateTicketNumber()
-    }
-
-    private fun initViews() {
-        btnBack = findViewById(R.id.btnBack)
-        cardBackButton = findViewById(R.id.cardBackButton)
-        tvQuestion = findViewById(R.id.tvQuestion)
-        tvTicketNumber = findViewById(R.id.tvTicketNumber)
-        nameInputLayout = findViewById(R.id.nameInputLayout)
-        contentInputLayout = findViewById(R.id.contentInputLayout)
         etName = findViewById(R.id.etName)
         etContent = findViewById(R.id.etContent)
+        spinnerPriority = findViewById(R.id.spinnerPriority)
+        spinnerContactMethod = findViewById(R.id.spinnerContactMethod)
+        spinnerContactTime = findViewById(R.id.spinnerContactTime)
         btnSubmit = findViewById(R.id.btnSubmit)
-        tvPriorityInfo = findViewById(R.id.tvPriorityInfo)
-        tvEstimatedTime = findViewById(R.id.tvEstimatedTime)
-    }
+        btnBack = findViewById(R.id.btnBack)
+        progressBar = findViewById(R.id.progressBar)
 
-    private fun setupListeners() {
-        // Configurar el botón de regresar
-        btnBack.setOnClickListener {
-            finish() // Cierra esta actividad y regresa a la anterior
-        }
+        // Configurar opciones para los spinners
+        setupDropdowns()
 
-        // Configurar el botón de enviar
+        // Botón regresar
+        btnBack.setOnClickListener { finish() }
+
+        // Configurar botón de envío
         btnSubmit.setOnClickListener {
-            if (validateForm()) {
-                sendTicket()
-            }
-        }
-
-        // Mostrar/ocultar información de prioridad al hacer clic
-        tvPriorityInfo.setOnClickListener {
-            tvEstimatedTime.visibility = if (tvEstimatedTime.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
+            if (validarFormulario()) {
+                enviarTicket()
             }
         }
     }
 
-    private fun generateTicketNumber() {
-        // Generar un número de ticket basado en la fecha actual
-        val dateFormat = SimpleDateFormat("yyMMddHHmm", Locale.getDefault())
-        val ticketId = "TK-" + dateFormat.format(Date()) + "-" + (1000..9999).random()
-        tvTicketNumber.text = "ID de ticket: $ticketId"
+    private fun setupDropdowns() {
+        // Opciones para prioridad
+        val prioridades = arrayOf("Alta", "Media", "Baja")
+        val adapterPrioridad = ArrayAdapter(
+            this, android.R.layout.simple_dropdown_item_1line, prioridades
+        )
+        spinnerPriority.setAdapter(adapterPrioridad)
+
+        // Opciones para metodo de contacto
+        val metodos = arrayOf("Email", "Teléfono", "WhatsApp")
+        val adapterMetodo = ArrayAdapter(
+            this, android.R.layout.simple_dropdown_item_1line, metodos
+        )
+        spinnerContactMethod.setAdapter(adapterMetodo)
+
+        // Opciones para horario
+        val horarios = arrayOf("Mañana (8-12h)", "Tarde (12-18h)", "Noche (18-22h)")
+        val adapterHorario = ArrayAdapter(
+            this, android.R.layout.simple_dropdown_item_1line, horarios
+        )
+        spinnerContactTime.setAdapter(adapterHorario)
     }
 
-    private fun validateForm(): Boolean {
+    private fun validarFormulario(): Boolean {
         var isValid = true
 
-        // Validar el nombre
-        if (etName.text.toString().trim().isEmpty()) {
-            nameInputLayout.error = "Por favor, ingresa tu nombre"
+        val nombre = etName.text.toString().trim()
+        if (nombre.isEmpty()) {
+            etName.error = "Por favor, ingresa tu nombre"
             isValid = false
-        } else {
-            nameInputLayout.error = null
         }
 
-        // Validar el contenido de la consulta
-        if (etContent.text.toString().trim().isEmpty()) {
-            contentInputLayout.error = "Por favor, detalla tu consulta"
+        val contenido = etContent.text.toString().trim()
+        if (contenido.isEmpty()) {
+            etContent.error = "Por favor, describe tu consulta"
             isValid = false
-        } else if (etContent.text.toString().trim().length < 20) {
-            contentInputLayout.error = "Tu descripción es demasiado corta. Por favor, sé más específico"
+        }
+
+        val prioridad = spinnerPriority.text.toString().trim()
+        if (prioridad.isEmpty()) {
+            spinnerPriority.error = "Selecciona una prioridad"
             isValid = false
-        } else {
-            contentInputLayout.error = null
+        }
+
+        val metodoContacto = spinnerContactMethod.text.toString().trim()
+        if (metodoContacto.isEmpty()) {
+            spinnerContactMethod.error = "Selecciona un método de contacto"
+            isValid = false
+        }
+
+        val horarioContacto = spinnerContactTime.text.toString().trim()
+        if (horarioContacto.isEmpty()) {
+            spinnerContactTime.error = "Selecciona un horario preferido"
+            isValid = false
         }
 
         return isValid
     }
 
-    private fun sendTicket() {
-        // Obtener los datos del formulario
-        val name = etName.text.toString().trim()
-        val content = etContent.text.toString().trim()
+    private fun enviarTicket() {
+        // Mostrar barra de progreso
+        progressBar.visibility = View.VISIBLE
+        btnSubmit.isEnabled = false
 
-        // Aquí implementar la lógica para enviar el ticket a tu sistema
+        // Obtener datos del formulario
+        val nombre = etName.text.toString().trim()
+        val contenido = etContent.text.toString().trim()
+        val prioridad = spinnerPriority.text.toString().trim()
+        val metodoContacto = spinnerContactMethod.text.toString().trim()
+        val horarioContacto = spinnerContactTime.text.toString().trim()
 
-        // Ejemplo de simulación de envío exitoso
-        Toast.makeText(
-            this,
-            "¡Ticket enviado con éxito! Te responderemos pronto, $name.",
-            Toast.LENGTH_LONG
-        ).show()
+        // Usar corrutinas para no bloquear el hilo principal
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val props = Properties()
+                props.put("mail.smtp.host", "smtp.gmail.com")
+                props.put("mail.smtp.socketFactory.port", "465")
+                props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
+                props.put("mail.smtp.auth", "true")
+                props.put("mail.smtp.port", "465")
 
-        // Limpiar el formulario después del envío exitoso
-        etName.setText("")
-        etContent.setText("")
+                // Configurar la sesión de correo
+                val session = Session.getInstance(props, object : Authenticator() {
+                    override fun getPasswordAuthentication(): PasswordAuthentication {
+                        // IMPORTANTE: Reemplaza con tu correo y contraseña de aplicación
+                        return PasswordAuthentication("tecanjos2025@gmail.com", "tdbd xpan qcyv tufc")
+                    }
+                })
 
-        // Generar un nuevo número de ticket
-        generateTicketNumber()
+                // Crear el mensaje
+                val message = MimeMessage(session)
+                message.setFrom(InternetAddress("tecanjos2025@gmail.com"))
+                message.addRecipient(Message.RecipientType.TO, InternetAddress("manujarad35@gmail.com"))
+                message.subject = "Nuevo ticket de soporte: $prioridad"
+
+                // Cuerpo del mensaje con formato
+                val cuerpoMensaje = """
+                    Se ha recibido un nuevo ticket de soporte con los siguientes detalles:
+                    
+                    Nombre: $nombre
+                    Prioridad: $prioridad
+                    Método de contacto preferido: $metodoContacto
+                    Horario preferido: $horarioContacto
+                    
+                    Descripción del problema:
+                    $contenido
+                """.trimIndent()
+
+                message.setText(cuerpoMensaje)
+
+                // Enviar el mensaje
+                Transport.send(message)
+
+                withContext(Dispatchers.Main) {
+                    progressBar.visibility = View.GONE
+                    btnSubmit.isEnabled = true
+                    Toast.makeText(
+                        this@SupportTicketActivity,
+                        "¡Ticket enviado con éxito! Te contactaremos pronto",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    // Limpiar campos después de enviar
+                    limpiarFormulario()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    progressBar.visibility = View.GONE
+                    btnSubmit.isEnabled = true
+                    Toast.makeText(
+                        this@SupportTicketActivity,
+                        "Error al enviar: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun limpiarFormulario() {
+        etName.text?.clear()
+        etContent.text?.clear()
+        spinnerPriority.setText("", false)
+        spinnerContactMethod.setText("", false)
+        spinnerContactTime.setText("", false)
     }
 }

@@ -17,6 +17,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {
+        resources {
+            excludes.add("META-INF/NOTICE.md")
+            excludes.add("META-INF/LICENSE.md")
+            excludes.add("META-INF/DEPENDENCIES")
+            excludes.add("META-INF/NOTICE")
+            excludes.add("META-INF/LICENSE")
+            excludes.add("META-INF/NOTICE.txt")
+            excludes.add("META-INF/LICENSE.txt")
+            excludes.add("META-INF/*.kotlin_module")
+            pickFirsts.add("META-INF/MANIFEST.MF")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -41,6 +55,8 @@ android {
 
 dependencies {
 
+    implementation ("com.sun.mail:android-mail:1.6.7")
+    implementation ("com.sun.mail:android-activation:1.6.7")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

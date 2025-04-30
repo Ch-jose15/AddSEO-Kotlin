@@ -2,12 +2,13 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_50"
     tools:context=".SupportTicketActivity">
 
-    <!-- AppBar fija con CollapsingToolbarLayout -->
+    <!-- AppBar fija -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/yellow_primary"
+                app:cardBackgroundColor="@color/blue_primary"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="4dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,24 +45,7 @@
                     android:src="@drawable/ic_arrow_back_custom" />
             </androidx.cardview.widget.CardView>
 
-            <!-- Número de ticket (elemento útil) -->
-            <TextView
-                android:id="@+id/tvTicketNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/yellow_light"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:text="ID de ticket: TK-2304221-1234"
-                android:textColor="@color/gray_800"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Pregunta principal en diagonal -->
+            <!-- Pregunta principal -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardQuestion"
                 android:layout_width="0dp"
@@ -80,14 +64,13 @@
                     android:id="@+id/tvQuestion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/yellow_primary"
+                    android:background="@color/blue_primary"
                     android:paddingStart="32dp"
                     android:paddingTop="16dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="16dp"
-                    android:rotation="-2"
                     android:text="¿Qué necesitas hoy?"
-                    android:textColor="@color/gray_900"
+                    android:textColor="@color/white"
                     android:textSize="28sp"
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
@@ -107,7 +90,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="32dp">
 
-            <!-- Tarjeta principal inclinada en dirección opuesta -->
+            <!-- Tarjeta principal -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardMain"
                 android:layout_width="0dp"
@@ -115,7 +98,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:rotation="1"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
@@ -145,64 +127,18 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:justificationMode="inter_word"
-                        android:text="Los tickets de soporte son tu línea directa con nuestros expertos técnicos. Cada ticket es tratado con la máxima prioridad, asegurando que tus problemas sean resueltos de manera rápida y eficiente. Nuestro sistema de tracking te permitirá seguir el estado de tu consulta en tiempo real."
+                        android:text="Los tickets de soporte son tu línea directa con nuestros expertos técnicos. Cada ticket es tratado con la máxima prioridad, asegurando que tus problemas sean resueltos de manera rápida y eficiente."
                         android:textAlignment="textStart"
                         android:textColor="@color/gray_700"
                         android:textSize="15sp" />
 
-                    <!-- Información de prioridad (elemento útil) -->
-                    <TextView
-                        android:id="@+id/tvPriorityInfo"
+                    <!-- Separador -->
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:background="@color/gray_100"
-                        android:drawableEnd="@drawable/ic_info"
-                        android:padding="8dp"
-                        android:text="Información de prioridad (toca para más detalles)"
-                        android:textColor="@color/gray_800"
-                        android:textSize="14sp"
-                        android:textStyle="italic" />
-
-                    <!-- Información de tiempo estimado (inicialmente oculto) -->
-                    <TextView
-                        android:id="@+id/tvEstimatedTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/yellow_light"
-                        android:padding="12dp"
-                        android:text="Tiempo estimado de respuesta:\n• Prioridad Alta: 2-4 horas\n• Prioridad Media: 24 horas\n• Prioridad Baja: 48 horas"
-                        android:textColor="@color/gray_800"
-                        android:textSize="14sp"
-                        android:visibility="gone" />
-
-                    <!-- Separador creativo -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="1dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="3dp"
-                            android:layout_weight="1"
-                            android:background="@color/yellow_primary" />
-
-                        <View
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:background="@drawable/circle_yellow" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="3dp"
-                            android:layout_weight="1"
-                            android:background="@color/yellow_primary" />
-                    </LinearLayout>
+                        android:background="@color/blue_light" />
 
                     <!-- Campo de Nombre -->
                     <com.google.android.material.textfield.TextInputLayout
@@ -211,10 +147,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Tu nombre"
-                        app:boxStrokeColor="@color/yellow_primary"
+                        app:boxStrokeColor="@color/blue_primary"
                         app:hintTextColor="@color/gray_600"
                         app:startIconDrawable="@drawable/ic_person"
-                        app:startIconTint="@color/yellow_primary">
+                        app:startIconTint="@color/blue_primary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etName"
@@ -224,7 +160,70 @@
                             android:inputType="textPersonName" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Campo de Consulta -->
+                    <!-- Campo de Prioridad del ticket -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/priorityInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Prioridad del ticket"
+                        app:boxStrokeColor="@color/blue_primary"
+                        app:hintTextColor="@color/gray_600"
+                        app:startIconDrawable="@drawable/ic_priority"
+                        app:startIconTint="@color/blue_primary">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerPriority"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Campo de Método de contacto preferido -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/contactMethodInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Método de contacto preferido"
+                        app:boxStrokeColor="@color/blue_primary"
+                        app:hintTextColor="@color/gray_600"
+                        app:startIconDrawable="@drawable/ic_contact"
+                        app:startIconTint="@color/blue_primary">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerContactMethod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Campo de Horario preferido de contacto -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/contactTimeInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:hint="Horario preferido de contacto"
+                        app:boxStrokeColor="@color/blue_primary"
+                        app:hintTextColor="@color/gray_600"
+                        app:startIconDrawable="@drawable/ic_time"
+                        app:startIconTint="@color/blue_primary">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerContactTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Campo de Descripción -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/contentInputLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -232,12 +231,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="¿En qué podemos ayudarte?"
-                        app:boxStrokeColor="@color/yellow_primary"
+                        app:boxStrokeColor="@color/blue_primary"
                         app:counterEnabled="true"
                         app:counterMaxLength="500"
                         app:hintTextColor="@color/gray_600"
                         app:startIconDrawable="@drawable/ic_message"
-                        app:startIconTint="@color/yellow_primary">
+                        app:startIconTint="@color/blue_primary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etContent"
@@ -255,18 +254,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        android:backgroundTint="@color/yellow_primary"
+                        android:backgroundTint="@color/blue_primary"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
                         android:text="ENVIAR TICKET"
-                        android:textColor="@color/gray_900"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:cornerRadius="12dp"
                         app:elevation="4dp"
                         app:icon="@drawable/ic_send"
                         app:iconGravity="textEnd"
-                        app:iconTint="@color/gray_900" />
+                        app:iconTint="@color/white" />
+
+                    <!-- Indicador de progreso -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:indeterminateTint="@color/blue_primary"
+                        android:visibility="gone" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
