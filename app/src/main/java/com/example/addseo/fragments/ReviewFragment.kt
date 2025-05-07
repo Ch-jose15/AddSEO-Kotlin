@@ -12,7 +12,7 @@ class ReviewFragment : Fragment(R.layout.fragment_review) {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.btnReview).setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/place/..."))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://g.co/kgs/5Ubq2zk"))
             startActivity(intent)
         }
     }

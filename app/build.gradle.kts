@@ -42,8 +42,12 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // Usa 'libs' para la dependencia de androidx.fragment
     implementation(libs.androidx.fragment)
+    implementation(libs.javax.mail)
+    implementation(libs.play.services.auth)
+    implementation(libs.okhttp)
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.addseo.R
+import com.example.addseo.ScheduleCallActivity
+import com.example.addseo.SupportTicketActivity
 
 class SupportFragment : Fragment(R.layout.fragment_support) {
 
@@ -21,11 +23,15 @@ class SupportFragment : Fragment(R.layout.fragment_support) {
         }
 
         view.findViewById<Button>(R.id.btnMessage).setOnClickListener {
-            // Acción para el botón de mensaje (esto se puede llenar según necesidad)
+            val intent = Intent(requireContext(), SupportTicketActivity::class.java)
+
+            startActivity(intent)
         }
 
         view.findViewById<Button>(R.id.btnAgenda).setOnClickListener {
-            // Acción para el botón de agenda (esto se puede llenar según necesidad)
+            val intent = Intent(requireContext(), ScheduleCallActivity::class.java)
+
+            startActivity(intent)
         }
     }
 }

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores existentes -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="yellow_primary">#FFFF00</color>
+    <color name="yellow_light">#FFFFE0</color>
+    <color name="gray_50">#F5F5F5</color>
+    <color name="blue_primary">#0000FF</color>
+    <color name="gray_900">#212121</color>
+    <color name="gray_800">#424242</color>
+    <color name="gray_700">#616161</color>
+    <color name="blue_light">#42A5F5</color>
+    <color name="gray_600">#757575</color>
 </resources>
