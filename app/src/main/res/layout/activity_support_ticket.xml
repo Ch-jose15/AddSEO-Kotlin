@@ -8,7 +8,7 @@
     android:background="@color/gray_50"
     tools:context=".SupportTicketActivity">
 
-    <!-- AppBar fija -->
+    <!-- AppBar con scroll -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
-            app:layout_scrollFlags="noScroll">
+            app:layout_scrollFlags="scroll|enterAlways">  <!-- Modificado aquí -->
 
             <!-- Botón de Regresar -->
             <androidx.cardview.widget.CardView
@@ -74,7 +74,6 @@
                     android:textSize="28sp"
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
