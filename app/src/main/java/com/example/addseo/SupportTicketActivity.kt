@@ -1,5 +1,13 @@
 package com.example.addseo
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -8,7 +16,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +42,33 @@ class SupportTicketActivity : AppCompatActivity() {
     private lateinit var btnBack: ImageButton
     private lateinit var progressBar: ProgressBar
 
+    // Constantes para el canal de notificaciones
+    companion object {
+        private const val CHANNEL_ID = "support_ticket_channel"
+        private const val NOTIFICATION_ID = 1
+    }
+
+    // Launcher para solicitar permiso de notificaciones
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permiso concedido, se podrán mostrar notificaciones
+            Toast.makeText(
+                this,
+                "¡Gracias! Ahora podrás recibir notificaciones de tus tickets",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            // Permiso denegado
+            Toast.makeText(
+                this,
+                "Sin notificaciones no podremos informarte del estado de tus tickets",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_support_ticket)
@@ -44,6 +83,12 @@ class SupportTicketActivity : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         progressBar = findViewById(R.id.progressBar)
 
+        // Crear canal de notificaciones para Android 8.0+
+        createNotificationChannel()
+
+        // Solicitar permiso de notificaciones en Android 13+
+        askNotificationPermission()
+
         // Configurar opciones para los spinners
         setupDropdowns()
 
@@ -54,6 +99,85 @@ class SupportTicketActivity : AppCompatActivity() {
         btnSubmit.setOnClickListener {
             if (validarFormulario()) {
                 enviarTicket()
+            }
+        }
+    }
+
+    private fun askNotificationPermission() {
+        // Solo es necesario solicitar el permiso en Android 13 (API 33) y superior
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Verificar si el permiso ya está concedido
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Si el permiso no está concedido, solicitarlo
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        // Crear el canal de notificación solo en Android 8.0+
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            description = descriptionText
+        }
+        // Registrar el canal con el sistema
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun showNotification(prioridad: String) {
+        // Verificar permiso en tiempo de ejecución
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // No hay permiso, no mostrar notificación
+                Toast.makeText(
+                    this,
+                    "No se pueden mostrar notificaciones. Verifica los permisos.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+        }
+
+        // Crear un intent para abrir la aplicación cuando se pulse la notificación
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        // Construir la notificación
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle("Ticket enviado con éxito")
+            .setContentText("Tu ticket de prioridad $prioridad ha sido enviado y será revisado pronto.")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true) // Desaparece al tocarla
+
+        // Mostrar la notificación
+        with(NotificationManagerCompat.from(this)) {
+            try {
+                notify(NOTIFICATION_ID, builder.build())
+            } catch (e: SecurityException) {
+                // Este caso podría ocurrir si los permisos han sido revocados
+                Toast.makeText(
+                    this@SupportTicketActivity,
+                    "No se pudo mostrar notificación: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -74,7 +198,7 @@ class SupportTicketActivity : AppCompatActivity() {
         spinnerContactMethod.setAdapter(adapterMetodo)
 
         // Opciones para horario
-        val horarios = arrayOf("Mañana (8-12h)", "Tarde (12-18h)", "Noche (18-22h)")
+        val horarios = arrayOf("Mañana (9-2h)", "Tarde (5-7h)")
         val adapterHorario = ArrayAdapter(
             this, android.R.layout.simple_dropdown_item_1line, horarios
         )
@@ -174,11 +298,14 @@ class SupportTicketActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
                     btnSubmit.isEnabled = true
-                    Toast.makeText(
+                    /*Toast.makeText(
                         this@SupportTicketActivity,
                         "¡Ticket enviado con éxito! Te contactaremos pronto",
                         Toast.LENGTH_LONG
-                    ).show()
+                    ).show()*/
+
+                    // Mostrar notificación al enviar el ticket exitosamente
+                    showNotification(prioridad)
 
                     // Limpiar campos después de enviar
                     limpiarFormulario()
