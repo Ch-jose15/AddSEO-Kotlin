@@ -19,6 +19,8 @@ playServicesAuth = "21.3.0"
 
 
 [libraries]
+android-mail = { group = "com.sun.mail", name = "android-mail", version = "1.6.7" }
+android-activation = { group = "com.sun.mail", name = "android-activation", version = "1.6.7" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 google-api-client-android = { module = "com.google.api-client:google-api-client-android", version.ref = "googleApiClientAndroid" }
 google-api-services-calendar = { module = "com.google.apis:google-api-services-calendar", version.ref = "googleApiServicesCalendar" }

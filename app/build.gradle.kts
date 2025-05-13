@@ -17,6 +17,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {
+        resources {
+            excludes.add("META-INF/LICENSE*")
+            excludes.add("META-INF/NOTICE*")
+            excludes.add("META-INF/*.kotlin_module")
+            excludes.add("META-INF/DEPENDENCIES")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -43,11 +52,12 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     implementation(libs.androidx.fragment)
-    implementation(libs.javax.mail)
+
     implementation(libs.play.services.auth)
     implementation(libs.okhttp)
 
-
+    implementation(libs.android.mail)
+    implementation(libs.android.activation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
