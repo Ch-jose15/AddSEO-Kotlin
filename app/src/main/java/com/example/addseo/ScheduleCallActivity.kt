@@ -23,6 +23,7 @@ class ScheduleCallActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var etEmail: EditText
     private lateinit var etPhone: EditText
+    private lateinit var btnBack: ImageButton
     private lateinit var btnSchedule: MaterialButton
 
     private var selectedDate: String? = null
@@ -39,11 +40,14 @@ class ScheduleCallActivity : AppCompatActivity() {
         tvSelectedTime = findViewById(R.id.tvSelectedTime)
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
+        btnBack = findViewById(R.id.btnBack)
         etPhone = findViewById(R.id.etPhone)
         btnSchedule = findViewById(R.id.btnSchedule)
 
         generateDateButtons()
         generateTimeButtons()
+
+        btnBack.setOnClickListener { finish() }
 
         btnSchedule.setOnClickListener {
             sendAppointment()

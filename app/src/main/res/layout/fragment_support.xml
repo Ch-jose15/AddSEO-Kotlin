@@ -1,9 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/border">
 
     <TextView
         android:id="@+id/supportText"
@@ -11,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="¿Podemos ayudarte?\n¡Tu soporte, al alcance de un clic!"
         android:textSize="18sp"
-        android:textColor="#000000"
+        android:textColor="@color/text_primary"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -21,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Olvídate de las esperas y resuelve tus dudas al instante desde un solo sitio."
         android:textSize="14sp"
-        android:textColor="#666666"
+        android:textColor="@color/text_secondary"
         android:gravity="center"
         android:layout_marginBottom="32dp"/>
 
@@ -32,39 +34,53 @@
         android:gravity="center"
         android:weightSum="3">
 
-        <Button
+        <!-- Botón Llamar -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button_bg"
-            android:text="📞"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:backgroundTint="@color/accent"
+
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_phone"
+            app:iconTint="@color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"/>
 
-        <Button
+        <!-- Botón Chatear -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button_bg"
-            android:text="💬"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:backgroundTint="@color/accent"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_message"
+            app:iconTint="@color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"/>
 
-        <Button
+        <!-- Botón Agendar -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAgenda"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/button_bg"
-            android:text="📅"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
+            android:backgroundTint="@color/accent"
+
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_calendar"
+            app:iconTint="@color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"/>
     </LinearLayout>

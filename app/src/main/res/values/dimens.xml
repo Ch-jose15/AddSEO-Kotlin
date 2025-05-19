@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_compact_height">210dp</dimen>
+    <dimen name="blog_height">670dp</dimen>
+</resources>
+
+
+
