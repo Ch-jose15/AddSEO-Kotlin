@@ -1,5 +1,13 @@
 package com.example.addseo
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.RingtoneManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -7,17 +15,14 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import javax.mail.*
-import javax.mail.internet.InternetAddress
-import javax.mail.internet.MimeMessage
 
 class SupportTicketActivity : AppCompatActivity() {
 
@@ -33,6 +38,16 @@ class SupportTicketActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_support_ticket)
+
+        // Solicitar permiso de notificación en Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permission = android.Manifest.permission.POST_NOTIFICATIONS
+            val requestCode = 100
+
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(permission), requestCode)
+            }
+        }
 
         // Inicializar vistas
         etName = findViewById(R.id.etName)
@@ -140,17 +155,17 @@ class SupportTicketActivity : AppCompatActivity() {
                 props.put("mail.smtp.port", "465")
 
                 // Configurar la sesión de correo
-                val session = Session.getInstance(props, object : Authenticator() {
-                    override fun getPasswordAuthentication(): PasswordAuthentication {
+                val session = javax.mail.Session.getInstance(props, object : javax.mail.Authenticator() {
+                    override fun getPasswordAuthentication(): javax.mail.PasswordAuthentication {
                         // IMPORTANTE: Reemplaza con tu correo y contraseña de aplicación
-                        return PasswordAuthentication("tecanjos2025@gmail.com", "tdbd xpan qcyv tufc")
+                        return javax.mail.PasswordAuthentication("tecanjos2025@gmail.com", "tdbd xpan qcyv tufc")
                     }
                 })
 
                 // Crear el mensaje
-                val message = MimeMessage(session)
-                message.setFrom(InternetAddress("tecanjos2025@gmail.com"))
-                message.addRecipient(Message.RecipientType.TO, InternetAddress("manujarad35@gmail.com"))
+                val message = javax.mail.internet.MimeMessage(session)
+                message.setFrom(javax.mail.internet.InternetAddress("tecanjos2025@gmail.com"))
+                message.addRecipient(javax.mail.Message.RecipientType.TO, javax.mail.internet.InternetAddress("manujarad35@gmail.com"))
                 message.subject = "Nuevo ticket de soporte: $prioridad"
 
                 // Cuerpo del mensaje con formato
@@ -169,16 +184,17 @@ class SupportTicketActivity : AppCompatActivity() {
                 message.setText(cuerpoMensaje)
 
                 // Enviar el mensaje
-                Transport.send(message)
+                javax.mail.Transport.send(message)
 
                 withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
                     btnSubmit.isEnabled = true
-                    Toast.makeText(
-                        this@SupportTicketActivity,
-                        "¡Ticket enviado con éxito! Te contactaremos pronto",
-                        Toast.LENGTH_LONG
-                    ).show()
+
+                    // Mostrar notificación en lugar de Toast
+                    mostrarNotificacion(
+                        "Ticket enviado con éxito",
+                        "Tu ticket de soporte ha sido recibido. Te contactaremos pronto."
+                    )
 
                     // Limpiar campos después de enviar
                     limpiarFormulario()
@@ -187,14 +203,56 @@ class SupportTicketActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
                     btnSubmit.isEnabled = true
-                    Toast.makeText(
-                        this@SupportTicketActivity,
-                        "Error al enviar: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+
+                    // Mostrar notificación de error
+                    mostrarNotificacion(
+                        "Error al enviar ticket",
+                        "No se pudo enviar: ${e.message}"
+                    )
                 }
             }
         }
+    }
+
+    private fun mostrarNotificacion(titulo: String, mensaje: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val channelId = "ticket_channel"
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_message)
+            .setContentTitle(titulo)
+            .setContentText(mensaje)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVibrate(longArrayOf(0, 500, 250, 500)) // Patrón de vibración
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Para Android Oreo y superior, se necesita un canal de notificación
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Canal de Tickets",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Notificaciones de tickets de soporte"
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 500, 250, 500)
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Generar un ID único para cada notificación
+        val notificationId = System.currentTimeMillis().toInt()
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
     private fun limpiarFormulario() {
