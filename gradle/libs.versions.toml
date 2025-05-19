@@ -23,7 +23,9 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 google-api-client-android = { module = "com.google.api-client:google-api-client-android", version.ref = "googleApiClientAndroid" }
 google-api-services-calendar = { module = "com.google.apis:google-api-services-calendar", version.ref = "googleApiServicesCalendar" }
 google-api-client-jackson2 = { module = "com.google.api-client:google-api-client-jackson2", version.ref = "googleApiClientJackson2" }
-javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "javaxMail" }
+
+android-mail = { group = "com.sun.mail", name = "android-mail", version = "1.6.7" }
+android-activation = { group = "com.sun.mail", name = "android-activation", version = "1.6.7" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

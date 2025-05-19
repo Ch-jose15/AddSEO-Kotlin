@@ -74,7 +74,7 @@ class SupportTicketActivity : AppCompatActivity() {
         spinnerContactMethod.setAdapter(adapterMetodo)
 
         // Opciones para horario
-        val horarios = arrayOf("Mañana (8-12h)", "Tarde (12-18h)", "Noche (18-22h)")
+        val horarios = arrayOf("Mañana (9-14h)", "Tarde (17-19h)")
         val adapterHorario = ArrayAdapter(
             this, android.R.layout.simple_dropdown_item_1line, horarios
         )
