@@ -157,29 +157,31 @@ class SupportTicketActivity : AppCompatActivity() {
                 // Configurar la sesión de correo
                 val session = javax.mail.Session.getInstance(props, object : javax.mail.Authenticator() {
                     override fun getPasswordAuthentication(): javax.mail.PasswordAuthentication {
-                        // IMPORTANTE: Reemplaza con tu correo y contraseña de aplicación
-                        return javax.mail.PasswordAuthentication("tecanjos2025@gmail.com", "tdbd xpan qcyv tufc")
+                        // Cuenta emisora: addseomarketingdigital@gmail.com
+                        return javax.mail.PasswordAuthentication("addseomarketingdigital@gmail.com", "kggc idix ycxw icvj")
                     }
                 })
 
                 // Crear el mensaje
                 val message = javax.mail.internet.MimeMessage(session)
-                message.setFrom(javax.mail.internet.InternetAddress("tecanjos2025@gmail.com"))
-                message.addRecipient(javax.mail.Message.RecipientType.TO, javax.mail.internet.InternetAddress("manujarad35@gmail.com"))
+                // El correo se envía desde addseomarketingdigital@gmail.com
+                message.setFrom(javax.mail.internet.InternetAddress("addseomarketingdigital@gmail.com", "Soporte AddSEO"))
+                // Los tickets llegan a hola@addseo.es
+                message.addRecipient(javax.mail.Message.RecipientType.TO, javax.mail.internet.InternetAddress("hola@addseo.es"))
                 message.subject = "Nuevo ticket de soporte: $prioridad"
 
                 // Cuerpo del mensaje con formato
                 val cuerpoMensaje = """
-                    Se ha recibido un nuevo ticket de soporte con los siguientes detalles:
-                    
-                    Nombre: $nombre
-                    Prioridad: $prioridad
-                    Método de contacto preferido: $metodoContacto
-                    Horario preferido: $horarioContacto
-                    
-                    Descripción del problema:
-                    $contenido
-                """.trimIndent()
+                Se ha recibido un nuevo ticket de soporte con los siguientes detalles:
+                
+                Nombre: $nombre
+                Prioridad: $prioridad
+                Método de contacto preferido: $metodoContacto
+                Horario preferido: $horarioContacto
+                
+                Descripción del problema:
+                $contenido
+            """.trimIndent()
 
                 message.setText(cuerpoMensaje)
 
