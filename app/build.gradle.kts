@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -46,8 +47,8 @@ dependencies {
     implementation(libs.javax.mail)
     implementation(libs.play.services.auth)
     implementation(libs.okhttp)
-
-
+    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation("com.onesignal:OneSignal:4.8.6")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
