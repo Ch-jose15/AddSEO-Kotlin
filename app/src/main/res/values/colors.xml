@@ -20,4 +20,15 @@
     <color name="success">#81C784</color>
     <color name="error">#E57373</color>
     <color name="info">#64B5F6</color>
+
+    <!-- Colores de Google -->
+    <color name="google_red_light">#F28B82</color>
+    <color name="google_blue_light">#7ECBCF</color>
+    <color name="google_yellow_light">#FDD663</color>
+    <color name="google_green_light">#81C995</color>
+
+    <color name="cabecera_color">#7ED6E3</color>
+    <color name="schedule_primary">#FFD661</color> <!-- El amarillo que me diste -->
+
+
 </resources>

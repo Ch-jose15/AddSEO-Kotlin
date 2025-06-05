@@ -7,78 +7,41 @@
     android:background="@color/gray_50"
     tools:context=".ScheduleCallActivity">
 
+    <!-- AppBar igual que SupportTicketActivity -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/schedule_primary"
         android:fitsSystemWindows="true"
         app:elevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            app:layout_scrollFlags="noScroll">
+            android:layout_height="120dp"
+            android:padding="16dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardBackButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/primary"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageButton
-                    android:id="@+id/btnBack"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Regresar"
-                    android:src="@drawable/ic_arrow_back_custom" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardQuestion"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Agendar Llamada"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardBackButton">
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvQuestion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/primary"
-                    android:paddingStart="32dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp"
-                    android:text="¿Qué necesitas hoy?"
-                    android:textColor="@color/white"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium" />
-            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Scroll de contenido -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="72dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -105,6 +68,7 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
+                    <!-- Nombre -->
                     <EditText
                         android:id="@+id/etName"
                         android:layout_width="match_parent"
@@ -115,6 +79,7 @@
                         android:backgroundTint="@color/gray_100"
                         android:textColor="@color/text_primary" />
 
+                    <!-- Email -->
                     <EditText
                         android:id="@+id/etEmail"
                         android:layout_width="match_parent"
@@ -125,6 +90,7 @@
                         android:backgroundTint="@color/gray_100"
                         android:textColor="@color/text_primary" />
 
+                    <!-- Teléfono -->
                     <EditText
                         android:id="@+id/etPhone"
                         android:layout_width="match_parent"
@@ -135,7 +101,7 @@
                         android:backgroundTint="@color/gray_100"
                         android:textColor="@color/text_primary" />
 
-                    <!-- FECHAS -->
+                    <!-- Fecha -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,7 +125,7 @@
                             android:orientation="horizontal" />
                     </HorizontalScrollView>
 
-                    <!-- HORAS -->
+                    <!-- Hora -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,25 +167,37 @@
                         android:textColor="@color/gray_800"
                         android:textSize="14sp" />
 
+                    <!-- Botón igual a "ENVIAR" -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSchedule"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        android:backgroundTint="@color/primary"
+                        android:backgroundTint="@color/schedule_primary"
                         android:paddingTop="16dp"
                         android:paddingBottom="16dp"
                         android:text="RESERVAR CITA"
+                        android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:cornerRadius="12dp"
-                        app:elevation="4dp"
-                        app:icon="@drawable/ic_check_circle"
-                        app:iconGravity="textEnd"
-                        app:iconTint="@color/white" />
+                        app:elevation="4dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:itemIconTint="@color/gray_800"
+        app:itemBackground="@drawable/bg_bottom_nav_selected"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_nav_menu" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,10 +13,10 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +32,6 @@ class SupportTicketActivity : AppCompatActivity() {
     private lateinit var spinnerContactMethod: AutoCompleteTextView
     private lateinit var spinnerContactTime: AutoCompleteTextView
     private lateinit var btnSubmit: Button
-    private lateinit var btnBack: ImageButton
     private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,19 +55,39 @@ class SupportTicketActivity : AppCompatActivity() {
         spinnerContactMethod = findViewById(R.id.spinnerContactMethod)
         spinnerContactTime = findViewById(R.id.spinnerContactTime)
         btnSubmit = findViewById(R.id.btnSubmit)
-        btnBack = findViewById(R.id.btnBack)
         progressBar = findViewById(R.id.progressBar)
 
         // Configurar opciones para los spinners
         setupDropdowns()
 
-        // Botón regresar
-        btnBack.setOnClickListener { finish() }
-
         // Configurar botón de envío
         btnSubmit.setOnClickListener {
             if (validarFormulario()) {
                 enviarTicket()
+            }
+        }
+
+        // Configurar BottomNavigationView
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.nav_support
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_support -> {
+                    // Ya estamos en esta pantalla
+                    true
+                }
+                R.id.nav_schedule -> {
+                    startActivity(Intent(this, ScheduleCallActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                else -> false
             }
         }
     }
@@ -220,7 +239,7 @@ class SupportTicketActivity : AppCompatActivity() {
             .setContentText(mensaje)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setVibrate(longArrayOf(0, 500, 250, 500)) // Patrón de vibración
+            .setVibrate(longArrayOf(0, 500, 250, 500))
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setContentIntent(pendingIntent)
 

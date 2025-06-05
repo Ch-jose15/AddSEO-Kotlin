@@ -12,64 +12,25 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/cabecera_color"
         android:fitsSystemWindows="true"
         app:elevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            app:layout_scrollFlags="noScroll">
+            android:layout_height="120dp"
+            android:padding="16dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardBackButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/primary"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageButton
-                    android:id="@+id/btnBack"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Regresar"
-                    android:src="@drawable/ic_arrow_back_custom" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardQuestion"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
-                app:cardBackgroundColor="@color/primary"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Contáctanos"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardBackButton">
-
-                <TextView
-                    android:id="@+id/tvQuestion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="32dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp"
-                    android:text="¿Qué necesitas hoy?"
-                    android:textColor="@color/white"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -78,196 +39,168 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="16dp"
+        android:layout_marginBottom="56dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingBottom="32dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardMain"
-                android:layout_width="0dp"
+            <!-- Campo Nombre -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:hint="Nombre"
+                app:boxStrokeColor="@color/accent"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/text_secondary">
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="24dp">
+                    android:backgroundTint="@color/white"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/text_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tickets de Soporte"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_primary"
-                        android:textSize="26sp"
-                        android:textStyle="bold" />
+            <!-- Campo Prioridad -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/priorityInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Prioridad del ticket"
+                app:boxStrokeColor="@color/accent"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_priority"
+                app:startIconTint="@color/text_secondary">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:justificationMode="inter_word"
-                        android:text="Los tickets de soporte son tu línea directa con nuestros expertos técnicos. Cada ticket es tratado con la máxima prioridad, asegurando que tus problemas sean resueltos de manera rápida y eficiente."
-                        android:textAlignment="textStart"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="15sp" />
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerPriority"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:inputType="none"
+                    android:textColor="@color/text_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@color/gray_100" />
+            <!-- Campo Método de contacto -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/contactMethodInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Método de contacto preferido"
+                app:boxStrokeColor="@color/accent"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_contact"
+                app:startIconTint="@color/text_secondary">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nameInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Tu nombre"
-                        app:boxStrokeColor="@color/accent"
-                        app:hintTextColor="@color/text_secondary"
-                        app:startIconDrawable="@drawable/ic_person"
-                        app:startIconTint="@color/accent">
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerContactMethod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:inputType="none"
+                    android:textColor="@color/text_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:inputType="textPersonName"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Campo Horario -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/contactTimeInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Horario preferido de contacto"
+                app:boxStrokeColor="@color/accent"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_time"
+                app:startIconTint="@color/text_secondary">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/priorityInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="Prioridad del ticket"
-                        app:boxStrokeColor="@color/accent"
-                        app:hintTextColor="@color/text_secondary"
-                        app:startIconDrawable="@drawable/ic_priority"
-                        app:startIconTint="@color/accent">
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerContactTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:inputType="none"
+                    android:textColor="@color/text_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                        <AutoCompleteTextView
-                            android:id="@+id/spinnerPriority"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:inputType="none"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Campo Contenido -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/contentInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="¿En qué podemos ayudarte?"
+                app:boxStrokeColor="@color/accent"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
+                app:hintTextColor="@color/text_secondary"
+                app:startIconDrawable="@drawable/ic_message"
+                app:startIconTint="@color/text_secondary">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/contactMethodInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="Método de contacto preferido"
-                        app:boxStrokeColor="@color/accent"
-                        app:hintTextColor="@color/text_secondary"
-                        app:startIconDrawable="@drawable/ic_contact"
-                        app:startIconTint="@color/accent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:lines="6"
+                    android:textColor="@color/text_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                        <AutoCompleteTextView
-                            android:id="@+id/spinnerContactMethod"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:inputType="none"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Botón Enviar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/cabecera_color"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="Enviar"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp"
+                app:elevation="4dp" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/contactTimeInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="Horario preferido de contacto"
-                        app:boxStrokeColor="@color/accent"
-                        app:hintTextColor="@color/text_secondary"
-                        app:startIconDrawable="@drawable/ic_time"
-                        app:startIconTint="@color/accent">
+            <!-- ProgressBar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:indeterminateTint="@color/accent"
+                android:visibility="gone" />
 
-                        <AutoCompleteTextView
-                            android:id="@+id/spinnerContactTime"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:inputType="none"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/contentInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="¿En qué podemos ayudarte?"
-                        app:boxStrokeColor="@color/accent"
-                        app:counterEnabled="true"
-                        app:counterMaxLength="500"
-                        app:hintTextColor="@color/text_secondary"
-                        app:startIconDrawable="@drawable/ic_message"
-                        app:startIconTint="@color/accent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etContent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:gravity="top"
-                            android:inputType="textMultiLine"
-                            android:lines="6"
-                            android:textColor="@color/text_primary" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSubmit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:backgroundTint="@color/accent"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:text="ENVIAR TICKET"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="12dp"
-                        app:elevation="4dp"
-                        app:icon="@drawable/ic_send"
-                        app:iconGravity="textEnd"
-                        app:iconTint="@color/white" />
-
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="16dp"
-                        android:indeterminateTint="@color/accent"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- BottomNavigationView SOLO ICONOS -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:itemIconTint="@color/gray_800"
+        app:labelVisibilityMode="unlabeled"
+        app:itemBackground="@drawable/bg_bottom_nav_selected"
+        app:menu="@menu/bottom_nav_menu" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,10 +2,12 @@ package com.example.addseo
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import okhttp3.*
 import org.json.JSONObject
@@ -24,7 +26,6 @@ class ScheduleCallActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var etEmail: EditText
     private lateinit var etPhone: EditText
-    private lateinit var btnBack: ImageButton
     private lateinit var btnSchedule: MaterialButton
 
     private var selectedDate: String? = null
@@ -42,15 +43,37 @@ class ScheduleCallActivity : AppCompatActivity() {
         tvSelectedTime = findViewById(R.id.tvSelectedTime)
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
-        btnBack = findViewById(R.id.btnBack)
         etPhone = findViewById(R.id.etPhone)
         btnSchedule = findViewById(R.id.btnSchedule)
 
-        btnBack.setOnClickListener { finish() }
         btnSchedule.setOnClickListener { sendAppointment() }
 
         fetchScheduledAppointments {
             generateDateButtons()
+        }
+
+        // BottomNavigationView
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.nav_schedule
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_support -> {
+                    startActivity(Intent(this, SupportTicketActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_schedule -> {
+                    // Ya estamos aquí
+                    true
+                }
+                else -> false
+            }
         }
     }
 
