@@ -1,49 +1,38 @@
 package com.example.addseo
 
-import ReviewFragment
-import SupportFragment
-import PostFragment
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.StyleSpan
+import android.graphics.Typeface
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var viewPager: ViewPager2
-    private lateinit var viewPagerContainer: ViewGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Configuración de ViewPager
-        viewPager = findViewById(R.id.viewPager)
-        viewPagerContainer = findViewById(R.id.viewPagerContainer)
+        // Ocultar ActionBar
+        supportActionBar?.hide()
 
-        viewPager.adapter = ViewPagerAdapter(this)
+        // Configurar el texto con "Choose the areas" en negrita
+        setupTitleText()
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                val layoutParams = viewPagerContainer.layoutParams
-                layoutParams.height = when (position) {
-                    2 -> resources.getDimensionPixelSize(R.dimen.blog_height)
-                    else -> resources.getDimensionPixelSize(R.dimen.card_compact_height)
-                }
-                viewPagerContainer.layoutParams = layoutParams
-            }
-        })
+        // Configurar los clicks de las tarjetas
+        setupCardClickListeners()
 
         // 🚨 Crear canal de notificación (Android 8+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -70,15 +59,70 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private inner class ViewPagerAdapter(activity: AppCompatActivity) :
-        FragmentStateAdapter(activity) {
-        override fun getItemCount(): Int = 3
+    private fun setupTitleText() {
+        val titleTextView = findViewById<TextView>(R.id.titleText)
+        val fullText = "Choose the areas\nyou want to work on\nto improve your health"
+        val spannableString = SpannableString(fullText)
 
-        override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> SupportFragment()
-            1 -> ReviewFragment()
-            2 -> PostFragment()
-            else -> throw IllegalStateException("Invalid position")
+        // Hacer "Choose the areas" en negrita
+        val boldEnd = fullText.indexOf("\n")
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            boldEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        titleTextView.text = spannableString
+    }
+
+    private fun setupCardClickListeners() {
+        val cardLlamadas = findViewById<CardView>(R.id.cardLlamadas)
+        val cardTecnico = findViewById<CardView>(R.id.cardTecnico)
+        val cardReuniones = findViewById<CardView>(R.id.cardReuniones)
+        val cardAgencias = findViewById<CardView>(R.id.cardAgencias)
+
+        // LLAMADAS - Abrir directamente la app de teléfono (mismo número que en SupportFragment)
+        cardLlamadas.setOnClickListener {
+            try {
+                val phoneNumber = "tel:+34 680318581" // Número de tu empresa
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "No se puede realizar la llamada", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // TÉCNICO - Abrir SupportTicketActivity directamente
+        cardTecnico.setOnClickListener {
+            try {
+                val intent = Intent(this, SupportTicketActivity::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Error al abrir tickets", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // REUNIONES - Abrir ScheduleCallActivity directamente
+        cardReuniones.setOnClickListener {
+            try {
+                val intent = Intent(this, ScheduleCallActivity::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Error al abrir calendario", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // AGENCIAS - Abrir enlace en navegador
+        cardAgencias.setOnClickListener {
+            try {
+                // Cambia esta URL por la URL real del panel de agencias
+                val panelUrl = "https://panel.addseo.com" // Reemplaza con tu URL real
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(panelUrl))
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "No se puede abrir el navegador", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
