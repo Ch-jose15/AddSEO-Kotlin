@@ -1,5 +1,6 @@
 package com.example.addseo
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class ScheduleCallActivity : AppCompatActivity() {
 
@@ -28,12 +29,13 @@ class ScheduleCallActivity : AppCompatActivity() {
 
     private var selectedDate: String? = null
     private var selectedTime: String? = null
+    private var blockedDateTimes = listOf<String>()
+    private val availableHours = listOf(9, 10, 11, 12, 13, 14, 16, 17, 18, 19)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_call)
 
-        // Referencias
         dateContainer = findViewById(R.id.dateContainer)
         timeContainer = findViewById(R.id.timeContainer)
         tvSelectedDate = findViewById(R.id.tvSelectedDate)
@@ -44,17 +46,53 @@ class ScheduleCallActivity : AppCompatActivity() {
         etPhone = findViewById(R.id.etPhone)
         btnSchedule = findViewById(R.id.btnSchedule)
 
-        generateDateButtons()
-        generateTimeButtons()
-
         btnBack.setOnClickListener { finish() }
+        btnSchedule.setOnClickListener { sendAppointment() }
 
-        btnSchedule.setOnClickListener {
-            sendAppointment()
+        fetchScheduledAppointments {
+            generateDateButtons()
         }
     }
 
+    private fun fetchScheduledAppointments(callback: () -> Unit) {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("https://script.google.com/macros/s/AKfycbxvA5qS-GvmN3CH_uXuPRylJaLOtupzpD4Vs6IKOzULKgdXceG2Rd1TO2RR591CL3pXWQ/exec")
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    Toast.makeText(this@ScheduleCallActivity, "Error consultando citas", Toast.LENGTH_SHORT).show()
+                    callback()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (!response.isSuccessful || body == null) {
+                    callback()
+                    return
+                }
+
+                val jsonArray = JSONObject(body).getJSONArray("appointments")
+                val result = mutableListOf<String>()
+                for (i in 0 until jsonArray.length()) {
+                    val startDate = jsonArray.getJSONObject(i).getString("startDate")
+                    result.add(startDate)
+                }
+                runOnUiThread {
+                    blockedDateTimes = result
+                    callback()
+                }
+            }
+        })
+    }
+
+    @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun generateDateButtons() {
+        dateContainer.removeAllViews()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val displayFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
         val today = Calendar.getInstance()
@@ -64,41 +102,56 @@ class ScheduleCallActivity : AppCompatActivity() {
             val dateStr = dateFormat.format(today.time)
             val displayStr = displayFormat.format(today.time)
 
-            val button = Button(this).apply {
-                text = displayStr
-                layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(8, 0, 8, 0)
-                }
-                setOnClickListener {
-                    selectedDate = dateStr
-                    tvSelectedDate.text = "Fecha seleccionada: $dateStr"
-                }
+            val availableForDate = availableHours.any { hour ->
+                val hourStr = String.format("%02d:00", hour)
+                val fullDateTime = "${dateStr}T${hourStr}:00"
+                !blockedDateTimes.contains(fullDateTime)
             }
-            dateContainer.addView(button)
+
+            if (availableForDate) {
+                val button = Button(this).apply {
+                    text = displayStr
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(8, 0, 8, 0)
+                    }
+                    setOnClickListener {
+                        selectedDate = dateStr
+                        tvSelectedDate.text = "Fecha seleccionada: $dateStr"
+                        generateTimeButtons()
+                    }
+                }
+                dateContainer.addView(button)
+            }
         }
     }
 
+    @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun generateTimeButtons() {
-        val hours = listOf(9, 10, 11, 12, 13, 14, 16, 17, 18, 19)
-        for (hour in hours) {
+        timeContainer.removeAllViews()
+        if (selectedDate == null) return
+
+        for (hour in availableHours) {
             val timeStr = String.format("%02d:00", hour)
-            val button = Button(this).apply {
-                text = timeStr
-                layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(8, 0, 8, 0)
+            val fullDateTime = "${selectedDate}T${timeStr}:00"
+            if (!blockedDateTimes.contains(fullDateTime)) {
+                val button = Button(this).apply {
+                    text = timeStr
+                    layoutParams = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(8, 0, 8, 0)
+                    }
+                    setOnClickListener {
+                        selectedTime = timeStr
+                        tvSelectedTime.text = "Hora seleccionada: $timeStr"
+                    }
                 }
-                setOnClickListener {
-                    selectedTime = timeStr
-                    tvSelectedTime.text = "Hora seleccionada: $timeStr"
-                }
+                timeContainer.addView(button)
             }
-            timeContainer.addView(button)
         }
     }
 
@@ -112,7 +165,6 @@ class ScheduleCallActivity : AppCompatActivity() {
             return
         }
 
-        // Combinar fecha y hora en formato ISO 8601 para Google Calendar (Make Free compatible)
         val startDate = "${selectedDate}T${selectedTime}:00"
 
         val json = JSONObject().apply {
@@ -123,13 +175,11 @@ class ScheduleCallActivity : AppCompatActivity() {
         }
 
         val client = OkHttpClient()
-        val body = RequestBody.create(
-            "application/json; charset=utf-8".toMediaTypeOrNull(),
-            json.toString()
-        )
+        val body = json.toString()
+            .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
 
         val request = Request.Builder()
-            .url("https://hook.eu2.make.com/d96vv1mfr4rfa12hgb4vccidfwf50jm8")
+            .url("https://hook.eu2.make.com/sg3qztlmyrh2obajspb77an7jnxblvyw")
             .post(body)
             .build()
 
@@ -140,10 +190,10 @@ class ScheduleCallActivity : AppCompatActivity() {
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call, response: Response) {
                 runOnUiThread {
                     if (response.isSuccessful) {
-                        // Limpiar campos
                         etName.text.clear()
                         etEmail.text.clear()
                         etPhone.text.clear()
@@ -152,7 +202,6 @@ class ScheduleCallActivity : AppCompatActivity() {
                         tvSelectedDate.text = "Fecha seleccionada:"
                         tvSelectedTime.text = "Hora seleccionada:"
 
-                        // Mostrar popup
                         AlertDialog.Builder(this@ScheduleCallActivity)
                             .setTitle("¡Éxito!")
                             .setMessage("Cita agendada correctamente")

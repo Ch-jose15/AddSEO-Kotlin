@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -27,6 +26,19 @@ android {
             )
         }
     }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/NOTICE.md")
+            excludes.add("META-INF/LICENSE.md")
+            excludes.add("META-INF/DEPENDENCIES")
+            excludes.add("META-INF/NOTICE")
+            excludes.add("META-INF/LICENSE")
+            excludes.add("META-INF/ASL2.0")
+            excludes.add("META-INF/*.kotlin_module")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -44,11 +56,15 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     implementation(libs.androidx.fragment)
-    implementation(libs.javax.mail)
+    implementation(libs.android.mail)
+    implementation(libs.android.activation)
     implementation(libs.play.services.auth)
     implementation(libs.okhttp)
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
     implementation("com.onesignal:OneSignal:4.8.6")
+    implementation(libs.volley)
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
