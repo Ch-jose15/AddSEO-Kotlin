@@ -3,6 +3,7 @@ package com.example.addseo
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.*
@@ -71,6 +72,16 @@ class ScheduleCallActivity : AppCompatActivity() {
                 R.id.nav_schedule -> {
                     // Ya estamos aquí
                     true
+                }
+                R.id.nav_calls -> {
+                    try {
+                        val phoneNumber = "tel:+34 680318581" // Número de tu empresa
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "No se puede realizar la llamada", Toast.LENGTH_SHORT).show()
+                    }
+                    true // Retorna true para indicar que el ítem fue seleccionado correctamente
                 }
                 else -> false
             }

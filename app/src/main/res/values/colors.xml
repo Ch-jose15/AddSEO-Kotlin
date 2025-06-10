@@ -27,8 +27,8 @@
     <color name="google_yellow_light">#FDD663</color>
     <color name="google_green_light">#81C995</color>
 
-    <color name="cabecera_color">#7ED6E3</color>
-    <color name="schedule_primary">#FFD661</color> <!-- El amarillo que me diste -->
+    <color name="cabecera_color">#1fc0b4</color>
+    <color name="schedule_primary">#00c896</color> <!-- El amarillo que me diste -->
 
 
 </resources>

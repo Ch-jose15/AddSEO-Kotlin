@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -86,6 +88,16 @@ class SupportTicketActivity : AppCompatActivity() {
                     startActivity(Intent(this, ScheduleCallActivity::class.java))
                     overridePendingTransition(0, 0)
                     true
+                }
+                R.id.nav_calls -> {
+                    try {
+                        val phoneNumber = "tel:+34 680318581" // Número de tu empresa
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "No se puede realizar la llamada", Toast.LENGTH_SHORT).show()
+                    }
+                    true // Retorna true para indicar que el ítem fue seleccionado correctamente
                 }
                 else -> false
             }
